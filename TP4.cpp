@@ -12,7 +12,7 @@ struct Tarea {
 typedef struct Tarea tarea;
 
 void cargarTareas(tarea *X, int Y);
-void mostrarTareas(tarea *X, int Y, tarea *Z);
+void cargarTareasCompletadas(tarea *X, int Y, tarea *Z);
 
 
 #define MAX 200
@@ -33,7 +33,7 @@ int main() {
     tareasRealizadas = (tarea *) malloc(sizeof(tarea) * cantTareas);
 
     cargarTareas(tareasPendientes, cantTareas);
-    mostrarTareas(tareasPendientes, cantTareas);
+    cargarTareasCompletadas(tareasPendientes, cantTareas);
 
 
     getchar();
@@ -52,7 +52,7 @@ void cargarTareas(tarea *X, int Y) {
     }
 }
 
-void mostrarTareas(tarea *X, int Y, tarea *Z) { //X es el vector que contiene las tareas pendientes, Z el vector que contiene las tareas completadas
+void cargarTareasCompletadas(tarea *X, int Y, tarea *Z) { //X es el vector que contiene las tareas pendientes, Z el vector que contiene las tareas completadas
     printf("------- Listado de tareas ---------");
     int aux;
     int auxZ = 0;
