@@ -12,7 +12,7 @@ struct Tarea {
 typedef struct Tarea tarea;
 
 void cargarTareas(tarea *X, int Y);
-void mostrarTareas(tarea *X, int Y);
+void mostrarTareas(tarea *X, int Y, tarea *Z);
 
 
 #define MAX 200
@@ -46,17 +46,33 @@ void cargarTareas(tarea *X, int Y) {
         X[i].tareaID = i + 1;
         X[i].descripcion = (char *) malloc(sizeof(char) * MAX);
         printf("Ingrese la descripción de la tarea: ");
-        gets(X[i].descripcion);
+        scanf("%s", X[i].descripcion);
         fflush(stdin);
         X[i].duracion = rand() % 91 + 10;
     }
 }
 
-void mostrarTareas(tarea *X, int Y) {
+void mostrarTareas(tarea *X, int Y, tarea *Z) { //X es el vector que contiene las tareas pendientes, Z el vector que contiene las tareas completadas
     printf("------- Listado de tareas ---------");
+    int aux;
+    int auxZ = 0;
     for (int i = 0; i < Y; i++) {
         printf("\n\nID de tarea: %d\n", X[i].tareaID);
         printf("Descripción: %s\n", X[i].descripcion);
         printf("Duración: %d", X[i].duracion);
+       
+        printf("\n\n¿Se completó la tarea? Ingrese 1 si se ha completado, y cualquier otro número entero si no se ha completado: ");
+        scanf("%d", &aux);
+        fflush(stdin);
+
+        if (aux == 1) { //Si la tarea fue completada, cargo el vector Z con los datos de la tarea completada
+            Z[auxZ].tareaID = X[i].tareaID;
+            Z[auxZ].descripcion = (char *) malloc(sizeof(char) * MAX);
+            Z[auxZ].descripcion = X[i].descripcion;
+            Z[auxZ].duracion = X[i].duracion;
+            X[i] = NULL; //Borro la tarea completada de la lista de tareas pendientes
+            auxZ++;
+
+        }
     }
 }
