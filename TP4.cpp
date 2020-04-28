@@ -33,7 +33,7 @@ int main() {
     tareasRealizadas = (tarea *) malloc(sizeof(tarea) * cantTareas);
 
     cargarTareas(tareasPendientes, cantTareas);
-    cargarTareasCompletadas(tareasPendientes, cantTareas);
+    cargarTareasCompletadas(tareasPendientes, cantTareas, tareasRealizadas);
 
 
     getchar();
