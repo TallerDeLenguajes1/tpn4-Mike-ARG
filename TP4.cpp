@@ -68,7 +68,7 @@ void cargarTareasCompletadas(tarea **X, int Y, tarea **Z) { //X es el vector que
         if (aux == 1) { //Si la tarea fue completada, cargo el vector Z con los datos de la tarea completada
             Z[auxZ]->tareaID = X[i]->tareaID;
             Z[auxZ]->descripcion = (char *) malloc(sizeof(char) * MAX);
-            Z[auxZ]->descripcion = X[i]->descripcion;
+            strcpy(Z[auxZ]->descripcion, X[i]->descripcion);
             Z[auxZ]->duracion = X[i]->duracion;
             X[i] = NULL; //Borro la tarea completada de la lista de tareas pendientes
             auxZ = auxZ + 1;
