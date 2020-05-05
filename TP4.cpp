@@ -16,7 +16,7 @@ typedef struct Tarea tarea;
 void cargarTareas(tarea **X, int Y);
 void cargarTareasCompletadas(tarea **X, int Y, tarea **Z);
 void mostrarTodo(tarea **X, int Y, tarea **Z);
-tarea BuscarTarea(tarea **X, int Y, char cadena[MAX]);
+tarea BusquedaPorPalabra(tarea **X, int Y, char cadena[MAX]);
 
 
 int main() {
@@ -45,7 +45,7 @@ int main() {
     char cadena[MAX];
     scanf("%s", cadena);
 
-    tarea buscar = BuscarTarea(tareasPendientes, cantTareas, cadena);
+    tarea buscar = BusquedaPorPalabra(tareasPendientes, cantTareas, cadena);
 
     printf("\n\nID de tarea: %d\n", buscar.tareaID);
     printf("Descripción: %s", buscar.descripcion);
@@ -117,7 +117,7 @@ void mostrarTodo(tarea **X, int Y, tarea **Z) {
     
 }
 
-tarea BuscarTarea(tarea **X, int Y, char cadena[MAX]) {
+tarea BusquedaPorPalabra(tarea **X, int Y, char cadena[MAX]) {
     int ret;
     tarea aux;
     
