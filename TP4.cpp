@@ -44,10 +44,10 @@ int main() {
 
     printf("\n\nIngrese la ID de la tarea a buscar: ");
     scanf("%d", &ID);
-    tarea buscarTarea = buscarID(tareasPendientes, cantTareas, ID);
-    printf("\n\nID de tarea: %d\n", buscarTarea.tareaID);
-    printf("Descripción: %s", buscarTarea.descripcion);
-    printf("\nDuración: %d", buscarTarea.duracion);
+    tarea buscar = buscarTarea(tareasPendientes, cantTareas, ID);
+    printf("\n\nID de tarea: %d\n", buscar.tareaID);
+    printf("Descripción: %s", buscar.descripcion);
+    printf("\nDuración: %d", buscar.duracion);
 
 
 
@@ -116,7 +116,7 @@ void mostrarTodo(tarea **X, int Y, tarea **Z) {
     }
 }
 
-tarea buscarID(tarea **X, int Y, int ID) {
+tarea buscarTarea(tarea **X, int Y, int ID) {
 
     tarea *aux = (tarea *) malloc(sizeof(tarea));
 
