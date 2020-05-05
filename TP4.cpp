@@ -3,6 +3,8 @@
 #include <string.h>
 #include <time.h>
 
+#define MAX 200
+
 struct Tarea {
     int tareaID; //Numerado en ciclo iterativo
     char *descripcion; //
@@ -14,9 +16,8 @@ typedef struct Tarea tarea;
 void cargarTareas(tarea **X, int Y);
 void cargarTareasCompletadas(tarea **X, int Y, tarea **Z);
 void mostrarTodo(tarea **X, int Y, tarea **Z);
+tarea buscarTarea(tarea **X, int Y, char cadena[MAX]);
 
-
-#define MAX 200
 
 int main() {
 
@@ -39,6 +40,17 @@ int main() {
     cargarTareasCompletadas(tareasPendientes, cantTareas, tareasRealizadas);
     
     mostrarTodo(tareasPendientes, cantTareas, tareasRealizadas);
+
+    printf("\n\nIngrese el término a buscar: ");
+    char cadena[MAX];
+    scanf("%s", cadena);
+
+    tarea buscar = buscarTarea(tareasPendientes, cantTareas, cadena);
+
+    printf("\n\nID de tarea: %d\n", buscar.tareaID);
+    printf("Descripción: %s", buscar.descripcion);
+    printf("\nDuración: %d", buscar.duracion);
+
 
     getchar();
     return 0;
@@ -103,6 +115,19 @@ void mostrarTodo(tarea **X, int Y, tarea **Z) {
         }
     }
     
+}
+
+tarea buscarTarea(tarea **X, int Y, char cadena[MAX]) {
+    int ret;
+    tarea aux;
+    
+    for (int i = 0; i < Y; i++) {
+        ret = strcmp(X[i]->descripcion, cadena);
+        if (ret == 0) {
+            return *(X[i]);
+        }
+    }
+    return aux;
 }
 
 
