@@ -14,7 +14,7 @@ typedef struct Tarea tarea;
 void cargarTareas(tarea **X, int Y);
 void cargarTareasCompletadas(tarea **X, int Y, tarea **Z);
 void mostrarTodo(tarea **X, int Y, tarea **Z);
-tarea BuscarTarea(tarea **X, int Y, int ID);
+tarea BusquedaPorID(tarea **X, int Y, int ID);
 
 
 #define MAX 200
@@ -44,7 +44,7 @@ int main() {
 
     printf("\n\nIngrese la ID de la tarea a buscar: ");
     scanf("%d", &ID);
-    tarea buscar = BuscarTarea(tareasPendientes, cantTareas, ID);
+    tarea buscar = BusquedaPorID(tareasPendientes, cantTareas, ID);
     printf("\n\nID de tarea: %d\n", buscar.tareaID);
     printf("Descripción: %s", buscar.descripcion);
     printf("\nDuración: %d", buscar.duracion);
@@ -116,7 +116,7 @@ void mostrarTodo(tarea **X, int Y, tarea **Z) {
     }
 }
 
-tarea BuscarTarea(tarea **X, int Y, int ID) {
+tarea BusquedaPorID(tarea **X, int Y, int ID) {
 
     tarea *aux = (tarea *) malloc(sizeof(tarea));
 
