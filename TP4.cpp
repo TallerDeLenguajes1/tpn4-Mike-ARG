@@ -50,8 +50,6 @@ int main() {
     printf("\nDuración: %d", buscar.duracion);
 
 
-
-
     getchar();
     return 0;
 }
@@ -127,6 +125,4 @@ tarea BusquedaPorID(tarea **X, int Y, int ID) {
     }
     return *aux;
 }
-
-
 
