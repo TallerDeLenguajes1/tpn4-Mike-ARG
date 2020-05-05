@@ -14,7 +14,7 @@ typedef struct Tarea tarea;
 void cargarTareas(tarea **X, int Y);
 void cargarTareasCompletadas(tarea **X, int Y, tarea **Z);
 void mostrarTodo(tarea **X, int Y, tarea **Z);
-tarea buscarID(tarea **X, int Y, int ID);
+tarea buscarTarea(tarea **X, int Y, int ID);
 
 
 #define MAX 200
