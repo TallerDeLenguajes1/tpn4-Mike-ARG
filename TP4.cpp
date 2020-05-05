@@ -14,6 +14,7 @@ typedef struct Tarea tarea;
 void cargarTareas(tarea **X, int Y);
 void cargarTareasCompletadas(tarea **X, int Y, tarea **Z);
 void mostrarTodo(tarea **X, int Y, tarea **Z);
+tarea buscarID(tarea **X, int Y, int ID);
 
 
 #define MAX 200
@@ -25,6 +26,7 @@ int main() {
     int cantTareas;
     tarea **tareasPendientes;
     tarea **tareasRealizadas;
+    int ID;
 
 
     printf("Ingrese la cantidad de tareas a realizar: ");
@@ -39,6 +41,16 @@ int main() {
     cargarTareasCompletadas(tareasPendientes, cantTareas, tareasRealizadas);
     
     mostrarTodo(tareasPendientes, cantTareas, tareasRealizadas);
+
+    printf("\n\nIngrese la ID de la tarea a buscar: ");
+    scanf("%d", &ID);
+    tarea buscarTarea = buscarID(tareasPendientes, cantTareas, ID);
+    printf("\n\nID de tarea: %d\n", buscarTarea.tareaID);
+    printf("Descripción: %s", buscarTarea.descripcion);
+    printf("\nDuración: %d", buscarTarea.duracion);
+
+
+
 
     getchar();
     return 0;
@@ -98,11 +110,22 @@ void mostrarTodo(tarea **X, int Y, tarea **Z) {
     for (int i = 0; i < Y; i++) {
         if (Z[i] != NULL) {
             printf("\n\nID de tarea: %d\n", Z[i]->tareaID);
-            printf("Descripción: %s\n", Z[i]->descripcion);
-            printf("Duración: %d", Z[i]->duracion);
+            printf("Descripción: %s", Z[i]->descripcion);
+            printf("\nDuración: %d", Z[i]->duracion);
         }
     }
-    
+}
+
+tarea buscarID(tarea **X, int Y, int ID) {
+
+    tarea *aux = (tarea *) malloc(sizeof(tarea));
+
+    for (int i = 0; i < Y; i++) {
+        if (X[i]->tareaID == ID) {
+            return *(X[i]);
+        }
+    }
+    return *aux;
 }
 
 
