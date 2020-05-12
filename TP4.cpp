@@ -90,7 +90,7 @@ nodo *insertarNodo(nodo **lista, nodo *nodo) {
     return *lista;
 }
 
-void cargarTareasCompletadas(nodo **lista1, nodo **lista2) {
+void cargarTareasCompletadas(nodo **lista1, nodo **lista2) { //Bugueado
    int completar;
    nodo *aux = (nodo *)malloc(sizeof(nodo));
    
