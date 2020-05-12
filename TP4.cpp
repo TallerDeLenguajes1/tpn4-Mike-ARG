@@ -11,9 +11,20 @@ struct Tarea {
 
 typedef struct Tarea tarea;
 
-void cargarTareas(tarea **X, int Y);
-void cargarTareasCompletadas(tarea **X, int Y, tarea **Z);
-void mostrarTodo(tarea **X, int Y, tarea **Z);
+struct Nodo{
+    Tarea T;
+    Nodo *siguiente;
+};
+
+typedef struct Nodo nodo;
+
+nodo *crearListaVacia();
+nodo *crearNodo(int tareaID, char *cadena, int duracion);
+nodo *insertarNodo(nodo **lista, nodo *nodo);
+nodo *borrarNodo(nodo **lista);
+void cargarTareasCompletadas(nodo **lista1, nodo **lista2);
+void mostrarTareas(nodo **lista1, nodo **lista2);
+
 tarea BusquedaPorID(tarea **X, int Y, int ID);
 
 
@@ -23,106 +34,112 @@ int main() {
 
     srand(time(0));
     
-    int cantTareas;
-    tarea **tareasPendientes;
-    tarea **tareasRealizadas;
-    int ID;
+    int cantTareas, ID;
+    
+    nodo *listaDeTareas = crearListaVacia();
+    nodo *tareasCompletadas = crearListaVacia();
+    
+    nodo *nod;
+    
+    int completar;
+    char cad[MAX];
 
 
     printf("Ingrese la cantidad de tareas a realizar: ");
     scanf("%d", &cantTareas);
-    fflush(stdin);
+    fflush(stdout);
+    getchar();
 
-    tareasPendientes = (tarea **) malloc(sizeof(tarea) * cantTareas);
-    tareasRealizadas = (tarea **) malloc(sizeof(tarea) * cantTareas);
 
-    cargarTareas(tareasPendientes, cantTareas);
-    
-    cargarTareasCompletadas(tareasPendientes, cantTareas, tareasRealizadas);
-    
-    mostrarTodo(tareasPendientes, cantTareas, tareasRealizadas);
+    for (int i = 0; i < cantTareas; i++) {
+        printf("\nIngrese la descripción de la tarea %d: ", i + 1);
+        fgets(cad, MAX, stdin);
+        fflush(stdout);
+        nod = crearNodo(i + 1, cad, rand() % 91 + 10);
+        insertarNodo(&listaDeTareas, nod);
+    }
 
-    printf("\n\nIngrese la ID de la tarea a buscar: ");
-    scanf("%d", &ID);
-    tarea buscar = BusquedaPorID(tareasPendientes, cantTareas, ID);
-    printf("\n\nID de tarea: %d\n", buscar.tareaID);
-    printf("Descripción: %s", buscar.descripcion);
-    printf("\nDuración: %d", buscar.duracion);
+    cargarTareasCompletadas(&listaDeTareas, &tareasCompletadas);
+    mostrarTareas(&listaDeTareas, &tareasCompletadas);
 
 
     getchar();
     return 0;
 }
 
-void cargarTareas(tarea **X, int Y) {
+nodo *crearListaVacia() {
+    return NULL;
+}
 
-    for (int i = 0; i < Y; i++) {
-        X[i] = (tarea *) malloc(sizeof(tarea));
-        X[i]->tareaID = i + 1;
-        X[i]->descripcion = (char *) malloc(sizeof(char) * MAX);
-        printf("Ingrese la descripción de la tarea %d: ", i + 1);
-        scanf("%s", X[i]->descripcion);
-        fflush(stdin);
-        X[i]->duracion = rand() % 91 + 10;
+nodo *crearNodo(int tareaID, char *cadena, int duracion) {
+    nodo *NNodo = (nodo *)malloc(sizeof(nodo));
+    NNodo->T.tareaID = tareaID;
+    NNodo->T.descripcion = (char *)malloc(sizeof(char) * strlen(cadena));
+    strcpy(NNodo->T.descripcion, cadena);
+    NNodo->T.duracion = duracion;
+    NNodo->siguiente = NULL;
+
+    return NNodo;
+}
+
+nodo *insertarNodo(nodo **lista, nodo *nodo) {
+    
+    nodo->siguiente = *lista;
+    *lista = nodo;
+
+    return *lista;
+}
+
+void cargarTareasCompletadas(nodo **lista1, nodo **lista2) {
+   int completar;
+   nodo *aux = (nodo *)malloc(sizeof(nodo));
+   
+   printf("\n\n----------Lista de Tareas----------");
+   while(*lista1){
+    printf("\n\nID de la tarea: %d", (*lista1)->T.tareaID);
+    printf("\n\nDescripción de la tarea: %s", (*lista1)->T.descripcion);
+    printf("\nDuración de la tarea: %d", (*lista1)->T.duracion);
+    printf("\n\n¿Se completó la tarea? Ingrese 1 si se completó, o cualquier otro número entero si NO se completó: ");
+    scanf("%d", &completar);
+    fflush(stdout);
+    getchar();
+
+    if(completar == 1) {
+        aux = *lista1;
+        *lista1 = borrarNodo(lista1);
+        *lista2 = insertarNodo(lista2, aux);
+    } else {
+        *lista1 = (*lista1)->siguiente;
+    }
     }
 }
 
-void cargarTareasCompletadas(tarea **X, int Y, tarea **Z) { //X es el vector que contiene las tareas pendientes, Z el vector que contiene las tareas completadas
-    printf("------- Listado de tareas ---------");
-    int aux;
-    int auxZ = 0;
-    for (int i = 0; i < Y; i++) {
-        printf("\n\nID de tarea: %d\n", X[i]->tareaID);
-        printf("Descripción: %s\n", X[i]->descripcion);
-        printf("Duración: %d", X[i]->duracion);
-       
-        printf("\n\n¿Se completó la tarea? Ingrese 1 si se ha completado, y cualquier otro número entero si no se ha completado: ");
-        scanf("%d", &aux);
-        fflush(stdin);
+nodo *borrarNodo(nodo **lista) {
+    nodo *aux = *lista;
+    *lista = (*lista)->siguiente;
+    free(aux);
 
-        if (aux == 1) { //Si la tarea fue completada, cargo el vector Z con los datos de la tarea completada
-            Z[auxZ] = (tarea *) malloc(sizeof(tarea));
-            Z[auxZ]->tareaID = X[i]->tareaID;
-            Z[auxZ]->descripcion = (char *) malloc(sizeof(char) * MAX);
-            strcpy(Z[auxZ]->descripcion, X[i]->descripcion);
-            Z[auxZ]->duracion = X[i]->duracion;
-            X[i] = NULL; //Borro la tarea completada de la lista de tareas pendientes
-            auxZ = auxZ + 1;
-        }
-    }
+    return *lista;
 }
 
-void mostrarTodo(tarea **X, int Y, tarea **Z) {
-    printf("\n\n--------------Tareas pendientes--------------");
+void mostrarTareas(nodo **lista1, nodo **lista2) {
+    printf("\n\n----------Tareas pendientes----------");
+    
+    while(*lista1){
+        printf("\n\nID de la tarea: %d", (*lista1)->T.tareaID);
+        printf("\nDescripción de la tarea: %s", (*lista1)->T.descripcion);
+        printf("\nDuración de la tarea: %d", (*lista1)->T.duracion);
+        
+        *lista1 = (*lista1)->siguiente;
+    }   
+    printf("\n\n----------Tareas completadas----------");
 
-    for (int i = 0; i < Y; i++) {
-        if (X[i] != NULL) {
-            printf("\n\nID de tarea: %d\n", X[i]->tareaID);
-            printf("Descripción: %s\n", X[i]->descripcion);
-            printf("Duración: %d", X[i]->duracion);
-        }
+    while(*lista2){
+        printf("\n\nID de la tarea: %d", (*lista2)->T.tareaID);
+        printf("\nDescripción de la tarea: %s", (*lista2)->T.descripcion);
+        printf("\nDuración de la tarea: %d", (*lista2)->T.duracion);
+
+        *lista2 = (*lista2)->siguiente;
     }
-
-    printf("\n\n--------------Tareas completadas--------------");
-
-    for (int i = 0; i < Y; i++) {
-        if (Z[i] != NULL) {
-            printf("\n\nID de tarea: %d\n", Z[i]->tareaID);
-            printf("Descripción: %s", Z[i]->descripcion);
-            printf("\nDuración: %d", Z[i]->duracion);
-        }
-    }
-}
-
-tarea BusquedaPorID(tarea **X, int Y, int ID) {
-
-    tarea *aux = (tarea *) malloc(sizeof(tarea));
-
-    for (int i = 0; i < Y; i++) {
-        if (X[i]->tareaID == ID) {
-            return *(X[i]);
-        }
-    }
-    return *aux;
 }
 
