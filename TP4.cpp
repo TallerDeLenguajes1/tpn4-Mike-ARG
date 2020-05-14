@@ -56,7 +56,7 @@ int main() {
         fgets(cad, MAX, stdin);
         fflush(stdout);
         nod = crearNodo(i + 1, cad, rand() % 91 + 10);
-        insertarNodo(&listaDeTareas, nod);
+        listaDeTareas = insertarNodo(&listaDeTareas, nod);
     }
 
     cargarTareasCompletadas(&listaDeTareas, &tareasCompletadas);
@@ -83,43 +83,40 @@ nodo *crearNodo(int tareaID, char *cadena, int duracion) {
 }
 
 nodo *insertarNodo(nodo **lista, nodo *nodo) {
-    
     nodo->siguiente = *lista;
     *lista = nodo;
 
     return *lista;
 }
 
-void cargarTareasCompletadas(nodo **lista1, nodo **lista2) { //Bugueado
-   int completar;
-   nodo *aux = (nodo *)malloc(sizeof(nodo));
-   
-   printf("\n\n----------Lista de Tareas----------");
-   while(*lista1){
-    printf("\n\nID de la tarea: %d", (*lista1)->T.tareaID);
-    printf("\n\nDescripción de la tarea: %s", (*lista1)->T.descripcion);
-    printf("\nDuración de la tarea: %d", (*lista1)->T.duracion);
-    printf("\n\n¿Se completó la tarea? Ingrese 1 si se completó, o cualquier otro número entero si NO se completó: ");
-    scanf("%d", &completar);
-    fflush(stdout);
-    getchar();
+void cargarTareasCompletadas(nodo **lista1, nodo **lista2) {
+    int completar;
+    nodo *punt;
+    punt = *lista1;
+    nodo *aux;
+    while (punt) {
+        printf("\n\nID de la tarea: %d", (*lista1)->T.tareaID);
+        printf("\nDescripción de la tarea: %s", (*lista1)->T.descripcion);
+        printf("\nDuración de la tarea: %d", (*lista1)->T.duracion);
+        
+        printf("\n\n¿Se completó la tarea? Ingrese 1 si se completó, y cualquier otro número entero si NO se completó: ");
+        scanf("%d", &completar);
+        fflush(stdout);
 
-    if(completar == 1) {
-        aux = *lista1;
-        *lista1 = borrarNodo(lista1);
-        *lista2 = insertarNodo(lista2, aux);
-    } else {
-        *lista1 = (*lista1)->siguiente;
-    }
+        if (completar == 1) {
+            aux = borrarNodo(lista1);
+            *lista2 = insertarNodo(lista2, aux);
+        } else {
+            punt = punt->siguiente;
+        }
     }
 }
 
 nodo *borrarNodo(nodo **lista) {
     nodo *aux = *lista;
     *lista = (*lista)->siguiente;
-    free(aux);
 
-    return *lista;
+    return aux;
 }
 
 void mostrarTareas(nodo **lista1, nodo **lista2) {
